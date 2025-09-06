@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}{% if ad %}ترمیم اشتہار{% else %}نیا اشتہار{% endif %} | خبریں{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="main-heading">{% if ad %}ترمیم اشتہار{% else %}نیا اشتہار{% endif %}</h2>
+    <a href="{% url 'admin_ads_list' %}" class="btn btn-outline-secondary">واپس جائیں</a>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="title" class="form-label">عنوان</label>
+                <input type="text" class="form-control" id="title" name="title" value="{{ ad.title|default:'' }}" required>
+            </div>
+            
+            <div class="mb-3">
+                <label for="link" class="form-label">لنک</label>
+                <input type="url" class="form-control" id="link" name="link" value="{{ ad.link|default:'' }}">
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="start_date" class="form-label">شروع کی تاریخ</label>
+                        <input type="date" class="form-control" id="start_date" name="start_date" value="{{ ad.start_date|default:''|date:'Y-m-d' }}" required>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="end_date" class="form-label">اختتام کی تاریخ</label>
+                        <input type="date" class="form-control" id="end_date" name="end_date" value="{{ ad.end_date|default:''|date:'Y-m-d' }}" required>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                <label for="image" class="form-label">تصویر</label>
+                <input type="file" class="form-control" id="image" name="image">
+                {% if ad.image %}
+                <div class="mt-2">
+                    <img src="{{ ad.image.url }}" alt="Current image" class="img-thumbnail" style="max-height: 150px;">
+                </div>
+                {% endif %}
+            </div>
+            
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="is_active" name="is_active" {% if ad.is_active or not ad %}checked{% endif %}>
+                <label class="form-check-label" for="is_active">فعال</label>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">محفوظ کریں</button>
+            <a href="{% url 'admin_ads_list' %}" class="btn btn-secondary">منسوخ کریں</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}اشتہارات کی انتظامیہ | خبریں{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="main-heading">اشتہارات کی انتظامیہ</h2>
+    <a href="{% url 'admin_ads_create' %}" class="btn btn-primary">نیا اشتہار</a>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>عنوان</th>
+                        <th>شروع</th>
+                        <th>اختتام</th>
+                        <th>حالت</th>
+                        <th>عمل</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ad in ads %}
+                    <tr>
+                        <td>{{ ad.title }}</td>
+                        <td>{{ ad.start_date }}</td>
+                        <td>{{ ad.end_date }}</td>
+                        <td>
+                            <span class="badge bg-{% if ad.is_active %}success{% else %}danger{% endif %}">
+                                {% if ad.is_active %}فعال{% else %}غیر فعال{% endif %}
+                            </span>
+                        </td>
+                        <td>
+                            <a href="{% url 'admin_ads_edit' ad.slug %}" class="btn btn-sm btn-outline-primary">ترمیم</a>
+                            <a href="{% url 'admin_ads_delete' ad.slug %}" class="btn btn-sm btn-outline-danger">حذف کریں</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

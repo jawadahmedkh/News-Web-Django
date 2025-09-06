@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}اقسام کی انتظامیہ | خبریں{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="main-heading">اقسام کی انتظامیہ</h2>
+    <a href="{% url 'admin_category_create' %}" class="btn btn-primary">نیا زمرہ</a>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>نام</th>
+                        <th>خبروں کی تعداد</th>
+                        <th>عمل</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for category in categories %}
+                    <tr>
+                        <td>{{ category.name }}</td>
+                        <td>{{ category.news_articles.count }}</td>
+                        <td>
+                            <a href="{% url 'admin_category_edit' category.slug %}" class="btn btn-sm btn-outline-primary">ترمیم</a>
+                            <a href="{% url 'admin_category_delete' category.slug %}" class="btn btn-sm btn-outline-danger">حذف کریں</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

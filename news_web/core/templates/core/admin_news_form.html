@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}{% if news %}ترمیم خبر{% else %}نیا خبر{% endif %} | خبریں{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="main-heading">{% if news %}ترمیم خبر{% else %}نیا خبر{% endif %}</h2>
+    <a href="{% url 'admin_news_list' %}" class="btn btn-outline-secondary">واپس جائیں</a>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="title" class="form-label">عنوان</label>
+                <input type="text" class="form-control" id="title" name="title" value="{{ news.title|default:'' }}" required>
+            </div>
+            
+            <div class="mb-3">
+                <label for="category" class="form-label">زمرہ</label>
+                <select class="form-select" id="category" name="category" required>
+                    <option value="">زمرہ منتخب کریں</option>
+                    {% for category in categories %}
+                    <option value="{{ category.slug }}" {% if news.category.slug == category.slug %}selected{% endif %}>
+                        {{ category.name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="mb-3">
+                <label for="short_description" class="form-label">خلاصہ</label>
+                <textarea class="form-control" id="short_description" name="short_description" rows="3">{{ news.short_description|default:'' }}</textarea>
+            </div>
+            
+            <div class="mb-3">
+                <label for="content" class="form-label">مواد</label>
+                <textarea class="form-control" id="content" name="content" rows="10" required>{{ news.content|default:'' }}</textarea>
+            </div>
+            
+            <div class="mb-3">
+                <label for="image" class="form-label">تصویر</label>
+                <input type="file" class="form-control" id="image" name="image">
+                {% if news.image %}
+                <div class="mt-2">
+                    <img src="{{ news.image.url }}" alt="Current image" class="img-thumbnail" style="max-height: 150px;">
+                </div>
+                {% endif %}
+            </div>
+            
+            <div class="mb-3">
+                <label for="status" class="form-label">حالت</label>
+                <select class="form-select" id="status" name="status">
+                    <option value="draft" {% if news.status == 'draft' %}selected{% endif %}>ڈرافٹ</option>
+                    <option value="published" {% if news.status == 'published' %}selected{% endif %}>شائع شدہ</option>
+                </select>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">محفوظ کریں</button>
+            <a href="{% url 'admin_news_list' %}" class="btn btn-secondary">منسوخ کریں</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}خبروں کی انتظامیہ | خبریں{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="main-heading">خبروں کی انتظامیہ</h2>
+    <a href="{% url 'admin_news_create' %}" class="btn btn-primary">نیا خبر</a>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>عنوان</th>
+                        <th>زمرہ</th>
+                        <th>مصنف</th>
+                        <th>تاریخ</th>
+                        <th>حالت</th>
+                        <th>ناظرین</th>
+                        <th>عمل</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for news in news_list %}
+                    <tr>
+                        <td>{{ news.title|truncatewords:5 }}</td>
+                        <td><span class="badge bg-secondary">{{ news.category.name }}</span></td>
+                        <td>{{ news.author.username }}</td>
+                        <td>{{ news.created_at|date:"d M Y" }}</td>
+                        <td>
+                            <span class="badge bg-{% if news.status == 'published' %}success{% else %}warning{% endif %}">
+                                {{ news.status }}
+                            </span>
+                        </td>
+                        <td>{{ news.views }}</td>
+                        <td>
+                            <a href="{% url 'admin_news_edit' news.slug %}" class="btn btn-sm btn-outline-primary">ترمیم</a>
+                            <a href="{% url 'admin_news_delete' news.slug %}" class="btn btn-sm btn-outline-danger">حذف کریں</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

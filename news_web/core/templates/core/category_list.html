@@ -1,12 +1,21 @@
-{% extends 'core/base.html' %}
-{% block title %}زمرے{% endblock %}
+{% extends "base.html" %}
+
+{% block title %}خبروں کی اقسام | خبریں{% endblock %}
+
 {% block content %}
-<h2>خبروں کے زمرے</h2>
-<ul class="list-group">
+<h2 class="main-heading">خبروں کی اقسام</h2>
+
+<div class="row">
     {% for category in categories %}
-    <li class="list-group-item">
-        <a href="#">{{ category.name }}</a>
-    </li>
+    <div class="col-md-4 mb-4">
+        <div class="card news-card h-100">
+            <div class="card-body text-center">
+                <h3 class="card-title">{{ category.name }}</h3>
+                <p class="card-text">{{ category.news_articles.count }} خبریں</p>
+                <a href="{% url 'category_detail' category.slug %}" class="btn btn-primary">تمام خبریں دیکھیں</a>
+            </div>
+        </div>
+    </div>
     {% endfor %}
-</ul>
+</div>
 {% endblock %}

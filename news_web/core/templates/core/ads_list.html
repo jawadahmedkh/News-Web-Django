@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}اشتہارات | خبریں{% endblock %}
+
+{% block content %}
+<h2 class="main-heading">اشتہارات</h2>
+
+{% if ads %}
+<div class="row">
+    {% for ad in ads %}
+    <div class="col-md-6 mb-4">
+        <div class="card news-card h-100">
+            {% if ad.image %}
+            <img src="{{ ad.image.url }}" class="card-img-top news-image" alt="{{ ad.title }}">
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ ad.title }}</h5>
+                <p class="card-text">شروع: {{ ad.start_date }} | اختتام: {{ ad.end_date }}</p>
+            </div>
+            <div class="card-footer">
+                <a href="{% url 'ad_detail' ad.slug %}" class="btn btn-primary">مزید دیکھیں</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="alert alert-info">
+    فی الحال کوئی اشتہار دستیاب نہیں ہے۔
+</div>
+{% endif %}
+{% endblock %}

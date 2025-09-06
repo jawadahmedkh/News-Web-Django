@@ -1,20 +1,43 @@
-{% extends 'core/base.html' %}
-{% block title %}{{ category.name }} - NewsHub{% endblock %}
+{% extends "base.html" %}
+
+{% block title %}{{ category.name }} | خبریں{% endblock %}
+
 {% block content %}
-<h2 class="fw-bold mb-3">{{ category.name }}</h2>
+<nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'home' %}">ہوم</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'category_list' %}">اقسام</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ category.name }}</li>
+    </ol>
+</nav>
+
+<h2 class="main-heading">{{ category.name }}</h2>
+
+{% if news_list %}
 <div class="row">
-  {% for article in news_list %}
-  <div class="col-md-6 mb-3">
-    <div class="card shadow-sm">
-      <div class="card-body">
-        <h5 class="card-title">{{ article.title }}</h5>
-        <p class="card-text">{{ article.content|truncatewords:25 }}</p>
-        <a href="{% url 'news_detail' article.slug %}" class="btn btn-sm btn-outline-primary">Read More</a>
-      </div>
+    {% for news in news_list %}
+    <div class="col-md-6 mb-4">
+        <div class="card news-card h-100">
+            {% if news.image %}
+            <img src="{{ news.image.url }}" class="card-img-top news-image" alt="{{ news.title }}">
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ news.title }}</h5>
+                <p class="card-text">{{ news.short_description|truncatewords:20 }}</p>
+            </div>
+            <div class="card-footer">
+                <div class="d-flex justify-content-between">
+                    <a href="{% url 'news_detail' news.slug %}" class="btn btn-sm btn-outline-primary">مزید پڑھیں</a>
+                    <small class="text-muted">{{ news.created_at|date:"d M Y" }}</small>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-  {% empty %}
-    <p>No news available in this category.</p>
-  {% endfor %}
+    {% endfor %}
 </div>
+{% else %}
+<div class="alert alert-info">
+    اس قسم میں ابھی تک کوئی خبریں شائع نہیں ہوئی ہیں۔
+</div>
+{% endif %}
 {% endblock %}
