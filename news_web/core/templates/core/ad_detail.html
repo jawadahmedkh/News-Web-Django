@@ -1,0 +1,11 @@
+{% extends 'core/base.html' %}
+{% block title %}{{ ad.title }} - NewsHub{% endblock %}
+{% block content %}
+<div class="text-center">
+  <h2 class="fw-bold">{{ ad.title }}</h2>
+  <a href="{{ ad.link }}" target="_blank">
+    <img src="{{ ad.image.url }}" class="img-fluid rounded shadow my-3" alt="{{ ad.title }}">
+  </a>
+  <p>Active until {{ ad.end_date|date:"F d, Y" }}</p>
+</div>
+{% endblock %}

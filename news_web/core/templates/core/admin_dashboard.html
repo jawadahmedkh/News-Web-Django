@@ -1,0 +1,79 @@
+{% extends 'core/base.html' %}
+{% block title %}Admin Dashboard - NewsHub{% endblock %}
+{% block content %}
+
+<h2 class="fw-bold text-center mb-4">Admin Dashboard</h2>
+
+<div class="row">
+  <!-- Stats -->
+  <div class="col-md-3 mb-3">
+    <div class="card text-bg-primary shadow">
+      <div class="card-body text-center">
+        <h4>{{ news_count }}</h4>
+        <p>News Articles</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3 mb-3">
+    <div class="card text-bg-success shadow">
+      <div class="card-body text-center">
+        <h4>{{ category_count }}</h4>
+        <p>Categories</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3 mb-3">
+    <div class="card text-bg-warning shadow">
+      <div class="card-body text-center">
+        <h4>{{ ad_count }}</h4>
+        <p>Ads</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3 mb-3">
+    <div class="card text-bg-danger shadow">
+      <div class="card-body text-center">
+        <h4>{{ draft_count }}</h4>
+        <p>Drafts</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Management Links -->
+<div class="row mt-4">
+  <div class="col-md-4">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h5>Manage News</h5>
+        <a href="{% url 'admin_news_create' %}" class="btn btn-primary btn-sm">Add News</a>
+        <a href="{% url 'admin_news_list' %}" class="btn btn-outline-secondary btn-sm">View All</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h5>Manage Categories</h5>
+        <a href="{% url 'admin_category_create' %}" class="btn btn-success btn-sm">Add Category</a>
+        <a href="{% url 'admin_category_list' %}" class="btn btn-outline-secondary btn-sm">View All</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h5>Manage Ads</h5>
+        <a href="{% url 'admin_ads_create' %}" class="btn btn-warning btn-sm">Add Ad</a>
+        <a href="{% url 'admin_ads_list' %}" class="btn btn-outline-secondary btn-sm">View All</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Optional Dark/Light Mode -->
+<div class="text-center mt-4">
+  <button id="themeToggle" class="btn btn-outline-dark">Toggle Dark/Light Mode</button>
+</div>
+
+{% endblock %}
