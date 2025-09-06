@@ -3,59 +3,146 @@
 {% block title %}ایڈمن ڈیش بورڈ | خبریں{% endblock %}
 
 {% block content %}
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="main-heading">ایڈمن ڈیش بورڈ</h2>
-    <a href="{% url 'home' %}" class="btn btn-outline-primary">سائٹ پر جائیں</a>
-</div>
-
 <div class="row">
-    <div class="col-md-4 mb-4">
-        <div class="card dashboard-card bg-primary text-white text-center p-3">
-            <div class="card-body">
-                <h3 class="card-title">{{ news_count }}</h3>
-                <p class="card-text">کل خبریں</p>
-                <a href="{% url 'admin_news_list' %}" class="btn btn-light">منظم کریں</a>
-            </div>
+    <!-- Admin Sidebar -->
+    <div class="col-md-3 admin-sidebar">
+        <div class="text-center py-4">
+            <h4 class="text-white mb-0">ایڈمن پینل</h4>
+            <p class="text-light small">خوش آمدید, {{ user.username }}</p>
+        </div>
+
+        
+        
+        <div class="list-group list-group-flush">
+            <a href="{% url 'admin_dashboard' %}" class="list-group-item list-group-item-action bg-transparent text-white">
+                <i class="fas fa-tachometer-alt me-2"></i> ڈیش بورڈ
+            </a>
+            <a href="{% url 'admin_news_list' %}" class="list-group-item list-group-item-action bg-transparent text-white">
+                <i class="fas fa-newspaper me-2"></i> خبریں
+            </a>
+            <a href="{% url 'admin_category_list' %}" class="list-group-item list-group-item-action bg-transparent text-white">
+                <i class="fas fa-folder me-2"></i> اقسام
+            </a>
+            <a href="{% url 'home' %}" class="list-group-item list-group-item-action bg-transparent text-white">
+                <i class="fas fa-globe me-2"></i> سائٹ دیکھیں
+            </a>
+            <a href="{% url 'admin_logout' %}" class="list-group-item list-group-item-action bg-transparent text-white">
+                <i class="fas fa-sign-out-alt me-2"></i> لاگ آؤٹ
+            </a>
+            
+        </div>
+
+        <!-- AdSense Setup Button -->
+        <div class="mt-4 p-3">
+            <button class="btn btn-info w-100" data-bs-toggle="modal" data-bs-target="#adsenseModal">
+                <i class="fas fa-ad me-2"></i> AdSense سیٹ اپ
+            </button>
         </div>
     </div>
-    <div class="col-md-4 mb-4">
-        <div class="card dashboard-card bg-success text-white text-center p-3">
-            <div class="card-body">
-                <h3 class="card-title">{{ category_count }}</h3>
-                <p class="card-text">اقسام</p>
-                <a href="{% url 'admin_category_list' %}" class="btn btn-light">منظم کریں</a>
+
+    <!-- Main Content -->
+    <div class="col-md-9">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="main-heading">ایڈمن ڈیش بورڈ</h2>
+            <div>
+                <span class="badge bg-info">لاگ ان: {{ user.username }}</span>
+                <a href="{% url 'home' %}" class="btn btn-outline-primary btn-sm ms-2">
+                    <i class="fas fa-external-link-alt"></i> سائٹ پر جائیں
+                </a>
             </div>
         </div>
-    </div>
-    <div class="col-md-4 mb-4">
-        <div class="card dashboard-card bg-info text-white text-center p-3">
+<!-- Quick Actions -->
+        <div class="card mt-4">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0"><i class="fas fa-bolt me-2"></i>فوری actions</h5>
+            </div>
             <div class="card-body">
-                <h3 class="card-title">{{ ad_count }}</h3>
-                <p class="card-text">اشتہارات</p>
-                <a href="{% url 'admin_ads_list' %}" class="btn btn-light">منظم کریں</a>
+                <div class="d-flex flex-wrap gap-2">
+                    <a href="{% url 'admin_news_create' %}" class="btn btn-primary">
+                        <i class="fas fa-plus me-2"></i>نیا خبر
+                    </a>
+                    <a href="{% url 'admin_category_create' %}" class="btn btn-success">
+                        <i class="fas fa-folder-plus me-2"></i>نیا زمرہ
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- Dashboard Stats -->
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="card dashboard-card bg-primary text-white text-center p-3">
+                    <div class="card-body">
+                        <i class="fas fa-newspaper fa-3x mb-3"></i>
+                        <h3 class="card-title">{{ news_count }}</h3>
+                        <p class="card-text">کل خبریں</p>
+                        <a href="{% url 'admin_news_list' %}" class="btn btn-light">منظم کریں</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card dashboard-card bg-success text-white text-center p-3">
+                    <div class="card-body">
+                        <i class="fas fa-folder fa-3x mb-3"></i>
+                        <h3 class="card-title">{{ category_count }}</h3>
+                        <p class="card-text">اقسام</p>
+                        <a href="{% url 'admin_category_list' %}" class="btn btn-light">منظم کریں</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-secondary text-white">
+                        <h5 class="mb-0"><i class="fas fa-clock me-2"></i>تازہ ترین خبریں</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="list-group">
+                            {% for news in latest_news|slice:":5" %}
+                            <a href="{% url 'admin_news_edit' news.slug %}" class="list-group-item list-group-item-action">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h6 class="mb-1">{{ news.title|truncatewords:5 }}</h6>
+                                    <small class="text-muted">{{ news.created_at|date:"d M Y" }}</small>
+                                </div>
+                                <small class="text-muted">{{ news.category.name }}</small>
+                            </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-<div class="row mt-4">
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-header bg-secondary text-white">
-                <h5 class="mb-0">تازہ ترین خبریں</h5>
+<!-- AdSense Setup Modal -->
+<div class="modal fade" id="adsenseModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Google AdSense سیٹ اپ</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="card-body">
-                <div class="list-group">
-                    {% for news in latest_news|slice:":5" %}
-                    <a href="{% url 'admin_news_edit' news.slug %}" class="list-group-item list-group-item-action">
-                        <div class="d-flex w-100 justify-content-between">
-                            <h6 class="mb-1">{{ news.title|truncatewords:5 }}</h6>
-                            <small class="text-muted">{{ news.created_at|date:"d M Y" }}</small>
-                        </div>
-                        <small class="text-muted">{{ news.category.name }}</small>
-                    </a>
-                    {% endfor %}
+            <div class="modal-body">
+                <p>AdSense ads کو فعال کرنے کے لیے:</p>
+                <ol>
+                    <li>Google AdSense account بنائیں</li>
+                    <li>اپنا AdSense publisher ID حاصل کریں</li>
+                    <li>base.html template میں <code>YOUR_ADSENSE_ID</code> کو اپنے ID سے تبدیل کریں</li>
+                    <li>Ad units بنائیں اور ad slots شامل کریں</li>
+                </ol>
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i>
+                    Ads خود بخود templates میں مخصوص positions پر display ہوں گے۔
                 </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بند کریں</button>
+                <a href="https://www.google.com/adsense" target="_blank" class="btn btn-primary">
+                    AdSense ویب سائٹ
+                </a>
             </div>
         </div>
     </div>

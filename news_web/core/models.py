@@ -48,25 +48,3 @@ class News(models.Model):
 
     def get_absolute_url(self):
         return reverse("news_detail", kwargs={"slug": self.slug})
-
-
-class Ad(models.Model):
-    title = models.CharField(max_length=255)
-    slug = AutoSlugField(populate_from="title", unique=True, null=True, default=None)
-    image = models.ImageField(upload_to="ads/", blank=True, null=True)
-    link = models.URLField(blank=True, null=True)
-    start_date = models.DateField()
-    end_date = models.DateField()
-    is_active = models.BooleanField(default=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.title
-
-    def is_running(self):
-        from django.utils import timezone
-        today = timezone.now().date()
-        return self.is_active and self.start_date <= today <= self.end_date
-
-    def get_absolute_url(self):
-        return reverse("ad_detail", kwargs={"slug": self.slug})

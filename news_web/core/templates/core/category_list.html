@@ -1,21 +1,85 @@
 {% extends "base.html" %}
 
-{% block title %}خبروں کی اقسام | خبریں{% endblock %}
+{% block title %}{{ category.name }} | خبریں{% endblock %}
 
 {% block content %}
-<h2 class="main-heading">خبروں کی اقسام</h2>
+<!-- Top Category Ad -->
+<div class="ad-container mb-4">
+    <span class="ad-label">Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-YOUR_ADSENSE_ID"
+         data-ad-slot="CATEGORY_TOP_AD_SLOT"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+</div>
 
+<nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'home' %}">ہوم</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'category_list' %}">اقسام</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ category.name }}</li>
+    </ol>
+</nav>
+
+<h2 class="main-heading">{{ category.name }}</h2>
+
+<!-- Middle Category Ad -->
+<div class="ad-container mb-4">
+    <span class="ad-label">Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-YOUR_ADSENSE_ID"
+         data-ad-slot="CATEGORY_MIDDLE_AD_SLOT"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+</div>
+
+{% if news_list %}
 <div class="row">
-    {% for category in categories %}
-    <div class="col-md-4 mb-4">
+    {% for news in news_list %}
+    <div class="col-md-6 mb-4">
         <div class="card news-card h-100">
-            <div class="card-body text-center">
-                <h3 class="card-title">{{ category.name }}</h3>
-                <p class="card-text">{{ category.news_articles.count }} خبریں</p>
-                <a href="{% url 'category_detail' category.slug %}" class="btn btn-primary">تمام خبریں دیکھیں</a>
+            {% if news.image %}
+            <img src="{{ news.image.url }}" class="card-img-top news-image" alt="{{ news.title }}">
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ news.title }}</h5>
+                <p class="card-text">{{ news.short_description|truncatewords:20 }}</p>
+            </div>
+            <div class="card-footer">
+                <div class="d-flex justify-content-between">
+                    <a href="{% url 'news_detail' news.slug %}" class="btn btn-sm btn-outline-primary">مزید پڑھیں</a>
+                    <small class="text-muted">{{ news.created_at|date:"d M Y" }}</small>
+                </div>
             </div>
         </div>
     </div>
     {% endfor %}
+</div>
+{% else %}
+<div class="alert alert-info">
+    اس قسم میں ابھی تک کوئی خبریں شائع نہیں ہوئی ہیں۔
+</div>
+{% endif %}
+
+<!-- Bottom Category Ad -->
+<div class="ad-container mt-4">
+    <span class="ad-label">Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-YOUR_ADSENSE_ID"
+         data-ad-slot="CATEGORY_BOTTOM_AD_SLOT"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
 </div>
 {% endblock %}

@@ -40,9 +40,23 @@
         </div>
         {% endif %}
         
+        <!-- Left Center Ad -->
+        <div class="ad-container mb-4">
+            <span class="ad-label">Advertisement</span>
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-YOUR_ADSENSE_ID"
+                 data-ad-slot="LEFT_CENTER_AD_SLOT"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+
         <!-- News Grid -->
         <div class="row">
-            {% for news in news_list|slice:"1:" %}
+            {% for news in news_list|slice:"1:6" %}
             <div class="col-md-6">
                 <div class="card news-card h-100">
                     {% if news.image %}
@@ -63,10 +77,38 @@
             </div>
             {% endfor %}
         </div>
+
+        <!-- Below Left Center Ad -->
+        <div class="ad-container mt-4">
+            <span class="ad-label">Advertisement</span>
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-YOUR_ADSENSE_ID"
+                 data-ad-slot="BELOW_LEFT_AD_SLOT"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
     </div>
     
     <!-- Sidebar -->
     <div class="col-lg-4">
+        <!-- Right Center Ad -->
+        <div class="ad-container mb-4">
+            <span class="ad-label">Advertisement</span>
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-YOUR_ADSENSE_ID"
+                 data-ad-slot="RIGHT_CENTER_AD_SLOT"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+
         <!-- Categories -->
         <div class="card mb-4">
             <div class="card-header bg-primary text-white">

@@ -1,6 +1,10 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.utils import timezone
-from .models import News, Category, Ad
+from .models import News, Category
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.views import LoginView
+from django.contrib.auth import logout
+from django.urls import reverse
+
 
 
 # =========================
@@ -10,15 +14,10 @@ def home(request):
     categories = Category.objects.all()
     news_list = News.objects.filter(status="published").order_by("-created_at")[:10]
 
-    # only running ads
-    ads = Ad.objects.filter(is_active=True)
-    ads = [ad for ad in ads if ad.is_running()]
-
     return render(request, "core/home.html", {
         "categories": categories,
         "news_list": news_list,
-        "ads": ads,
-    })
+        })
 
 
 def news_detail(request, slug):
@@ -42,16 +41,6 @@ def category_detail(request, slug):
     })
 
 
-def ads_list(request):
-    ads = Ad.objects.filter(is_active=True)
-    ads = [ad for ad in ads if ad.is_running()]
-    return render(request, "core/ads_list.html", {"ads": ads})
-
-
-def ad_detail(request, slug):
-    ad = get_object_or_404(Ad, slug=slug, is_active=True)
-    return render(request, "core/ad_detail.html", {"ad": ad})
-
 
 def about(request):
     return render(request, "core/about.html")
@@ -61,23 +50,44 @@ def contact(request):
     return render(request, "core/contact.html")
 
 
-# =========================
-# Admin Dashboard
-# =========================
+# Admin check function
+# Admin check function
+def is_admin(user):
+    return user.is_authenticated and user.is_staff
+
+# Custom Login View
+class AdminLoginView(LoginView):
+    template_name = 'core/admin_login.html'
+    redirect_authenticated_user = True
+    
+    def get_success_url(self):
+        return reverse('admin_dashboard')
+
+# Logout view
+def admin_logout(request):
+    logout(request)
+    return redirect('admin_login')
+
+# Update admin_dashboard to remove ad_count
+@login_required
+@user_passes_test(is_admin)
 def admin_dashboard(request):
     news_count = News.objects.count()
     category_count = Category.objects.count()
-    ad_count = Ad.objects.count()
+    latest_news = News.objects.all().order_by('-created_at')[:5]
+    
     return render(request, "core/admin_dashboard.html", {
         "news_count": news_count,
         "category_count": category_count,
-        "ad_count": ad_count,
+        "latest_news": latest_news,
     })
 
 
 # =========================
 # Admin - News CRUD
 # =========================
+@login_required
+@user_passes_test(is_admin)
 def admin_news_list(request):
     news_list = News.objects.all()
     return render(request, "core/admin_news_list.html", {"news_list": news_list})
@@ -111,7 +121,16 @@ def admin_news_edit(request, slug):
         news.title = request.POST.get("title")
         news.content = request.POST.get("content")
         category_slug = request.POST.get("category")
-        news.category = Category.objects.filter(slug=category_slug).first()
+        category = Category.objects.filter(slug=category_slug).first()
+        if not category:
+            categories = Category.objects.all()
+            error_message = "Selected category is invalid."
+            return render(
+                request,
+                "core/admin_news_form.html",
+                {"news": news, "categories": categories, "error_message": error_message},
+            )
+        news.category = category
         if request.FILES.get("image"):
             news.image = request.FILES.get("image")
         news.status = request.POST.get("status", "draft")
@@ -158,50 +177,3 @@ def admin_category_delete(request, slug):
     category.delete()
     return redirect("admin_category_list")
 
-
-# =========================
-# Admin - Ads CRUD
-# =========================
-def admin_ads_list(request):
-    ads = Ad.objects.all()
-    return render(request, "core/admin_ads_list.html", {"ads": ads})
-
-
-def admin_ads_create(request):
-    if request.method == "POST":
-        title = request.POST.get("title")
-        link = request.POST.get("link")
-        start_date = request.POST.get("start_date")
-        end_date = request.POST.get("end_date")
-        image = request.FILES.get("image")
-
-        Ad.objects.create(
-            title=title,
-            link=link,
-            start_date=start_date,
-            end_date=end_date,
-            image=image,
-        )
-        return redirect("admin_ads_list")
-    return render(request, "core/admin_ads_form.html")
-
-
-def admin_ads_edit(request, slug):
-    ad = get_object_or_404(Ad, slug=slug)
-    if request.method == "POST":
-        ad.title = request.POST.get("title")
-        ad.link = request.POST.get("link")
-        ad.start_date = request.POST.get("start_date")
-        ad.end_date = request.POST.get("end_date")
-        if request.FILES.get("image"):
-            ad.image = request.FILES.get("image")
-        ad.is_active = request.POST.get("is_active") == "on"
-        ad.save()
-        return redirect("admin_ads_list")
-    return render(request, "core/admin_ads_form.html", {"ad": ad})
-
-
-def admin_ads_delete(request, slug):
-    ad = get_object_or_404(Ad, slug=slug)
-    ad.delete()
-    return redirect("admin_ads_list")

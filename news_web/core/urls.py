@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from .views import AdminLoginView
 
 urlpatterns = [
     # Public views
@@ -8,10 +9,12 @@ urlpatterns = [
     path("", views.home, name="home"),
     path("news/<slug:slug>/", views.news_detail, name="news_detail"),
     path("category/<slug:slug>/", views.category_detail, name="category_detail"),
-    path("ads/<slug:slug>/", views.ad_detail, name="ad_detail"),
     path("categories/", views.category_list, name="category_list"),
     # Admin views
     path("admin/dashboard/", views.admin_dashboard, name="admin_dashboard"),
+     # Admin authentication
+    path("admin/login/", AdminLoginView.as_view(), name="admin_login"),
+    path("admin/logout/", views.admin_logout, name="admin_logout"),
 
     # Admin News CRUD
     path("admin/news/", views.admin_news_list, name="admin_news_list"),
@@ -24,10 +27,4 @@ urlpatterns = [
     path("admin/categories/create/", views.admin_category_create, name="admin_category_create"),
     path("admin/categories/edit/<slug:slug>/", views.admin_category_edit, name="admin_category_edit"),
     path("admin/categories/delete/<slug:slug>/", views.admin_category_delete, name="admin_category_delete"),
-
-    # Admin Ads CRUD
-    path("admin/ads/", views.admin_ads_list, name="admin_ads_list"),
-    path("admin/ads/create/", views.admin_ads_create, name="admin_ads_create"),
-    path("admin/ads/edit/<slug:slug>/", views.admin_ads_edit, name="admin_ads_edit"),
-    path("admin/ads/delete/<slug:slug>/", views.admin_ads_delete, name="admin_ads_delete"),
 ]
